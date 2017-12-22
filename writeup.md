@@ -17,7 +17,7 @@ The goals / steps of this project are the following:
 [undistorted]: ./examples/undistort_output.png "Undistorted"
 [original]: ./test_images/test1.jpg "Road Transformed"
 [threshold]: ./examples/binary.jpg "Binary Example"
-[straight]: ./text_images/straight_lines1.jpg "Straight Lane"
+[straight]: ./test_images/straight_lines1.jpg "Straight Lane"
 [warped]: ./examples/warped_straight_lines.jpg "Warp Example"
 [test4]: ./test_images/test4.jpg "Test 4"
 [pipeline]: ./examples/pipeline.jpg "Pipeline Result"
