@@ -17,7 +17,7 @@ The goals / steps of this project are the following:
 [undistorted]: ./examples/undistort_output.png "Undistorted"
 [original]: ./test_images/test1.jpg "Road Transformed"
 [threshold]: ./examples/binary.jpg "Binary Example"
-[straight]: ./text_iamges/straight_lines1.jpg "Straight Lane"
+[straight]: ./text_images/straight_lines1.jpg "Straight Lane"
 [warped]: ./examples/warped_straight_lines.jpg "Warp Example"
 [test4]: ./test_images/test4.jpg "Test 4"
 [pipeline]: ./examples/pipeline.jpg "Pipeline Result"
@@ -31,11 +31,11 @@ The first step of the pipeline involves correcting for camera distortion. I did 
 
 Distortion coefficients and the camera metrix  are then obtained by feeding this into OpenCV's `cv2.calibrateCamera()` method. These gives us enough to run `cv2.undistort`. We can now use one of the calibration images as our guinea pig for undistortion. For example, running undistortion from this:
 
-![alt text][undistorted]
+![alt text][distorted]
 
 gives us this result:
 
-![alt text][distorted]
+![alt text][undistorted]
 
 ### Color Thresholding
 
