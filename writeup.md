@@ -80,7 +80,7 @@ These are calculated by the `curve_radius()` and `center_position()` methods. We
 
 Given the estimated curvature of the lane, we then apply the visualization back to the original road image to show where we think the lane is.
 
-![alt text][final]
+![alt text][output]
 
 ### Pipeline (Video)
 
