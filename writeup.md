@@ -41,6 +41,11 @@ gives us this result:
 
 Thresholding (`apply_threshold()`) was implemented by first converting the image into the HLS colorspace, which is a better representation since it isolates the hue (which we don't need for lane lines). The L-channel gives us a grayscale representation of the image which I used the Sobel filter for to obtain the gradient edges. The S-channel gives us a more black and white image, and we use a simple binary threshold to isolate light colored lines. We then combine them into one image for the next steps.
 
+#### Update:
+
+Using gradients to isolate lane lines was a bit more error-prone and gave a more noisy binary image, so I played around with other colorspaces such as HSV, Lab and Luv. I ultimately settled with Luv's L-channel and HLS's L-channel to isolate white lines and Lab's b-channel to isolate yellow lines.
+
+
 ![alt text][original]
 ![alt text][threshold]
 
@@ -86,13 +91,12 @@ Given the estimated curvature of the lane, we then apply the visualization back 
 
 We run the pipeline through each frame of the project video. A text overlay also shows the estimated curve radius and position from center. Here's the [link](./project_video_out.mp4).
 
+I ran the perspective transform first before the thresholding operation, so that the error pixels don't get amplified and I end up with a less noisy image.
+
+We keep track of at most five good fits for each line just in case a subsequent line is not detected. This provides for a smoother lane estimate. As far as error detected goes, I'm keeping thresholds of curve changes from prior estimates and doing a rough estimate if both lines are parallel by comparing the distance between both ends and their respective centers.
+
 ### Discussion
 
-There were a lot of problems encountered when running the pipeline on the video (I didn't have time to address them all). First, the sliding window search would oftentimes not find any lane at all on a particular frame (especially on segmented lane lines). This throws off polynomial curve fitting and causes the visualization to create a different lane of its own. I mitigate this by only doing a sliding search on the first frame and using `next_fit()` to make minor adjustments so the visualizations will not be far off. I'm also keeping track of the previous frame's fits and throwing away any fits if the combined curve radius of both lanes exceeds a certain amount.
+While this is a satisfactory implementation, there are a few problems that arose, especially on the challenge videos. Static thresholding is not directly transferrable, since it might have been overfitted to certain brightness and contrast values, so there needs to be a way to do some sort of adaptive thresholding based on certain image metrics. I tried playing around with histogram equalization and OpenCV's adaptive thresholding functions, but it didn't yield good results.
 
-This is extremely rudimentary, but it does the job somewhat. A much more ideal solution in this case would be to keep track of a certain set of previous fits to get a better curve estimation. It
-also needs more forms of error detection (i.e. lane is not detected) and correction (i.e. apply sliding window search again).
-
-There's also a problem where pixels from cars sneak into the windows and causes the subsequent windows to latch onto them, thereby creating a false lane. I think the masking technique from the previous lane finding project will help in this regard. More robustly, being able to identify cars and subtracting them from the image would be a huge help too.
-
-I didn't get the chance to explore other forms of thresholding or colorspaces. There might be some more techniques there that would help isolate the lane lines.
+It's also subject to sudden video changes like bumps, glare or reflection which can be dealt with through better error detection and keeping track of prior fits (and determining whether or not to take advantage of them).
